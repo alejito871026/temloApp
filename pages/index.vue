@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="dark">  
-      <div @click="verCatalogo=false"  class="btn nav-link text-center text-white">TEMLO.NET</div>          
+      <div @click="verCatalogo=false, verPoliticas=false"  class="btn nav-link text-center text-white">TEMLO.NET</div>          
       <router-link to="/" id="creditos" class="nav-item text-white"></router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
