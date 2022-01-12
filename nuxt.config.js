@@ -66,7 +66,6 @@ export default {
           '/transportador':{},
           '/clientes':{},
           '/visitorsCatalogo':{},
-          
         }
       },
     ]

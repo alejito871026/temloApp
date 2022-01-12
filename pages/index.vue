@@ -1,12 +1,21 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">  
-      <div @click="verCatalogo=false, verPoliticas=false"  class="btn nav-link text-center text-white">TEMLO.NET</div>          
-      <router-link to="/" id="creditos" class="nav-item text-white"></router-link>
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-navbar toggleable="lg"  style="background-color: #751094;">  
+      <div @click="verCatalogo=false, verPoliticas=false"  class="btn nav-link text-center text-warning"><strong>TEMLO.NET</strong></div>    
+      <b-navbar-toggle target="nav-collapse" style="background-color: yellow;">
+        <strong>
+          <b-icon
+              icon="arrow-right"
+              animation="cylon"
+              variant="dark"
+              font-scale="1.5"
+          ></b-icon>
+          &ensp; <strong style="color: black;">MENÚ</strong> 
+      </strong>
+      </b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto"> 
-          <b-navbar-nav>
+        <b-navbar-nav class="ml-auto" > 
+          <b-navbar-nav >
             <div @click="verPoliticas=true,verCatalogo=false, verTratamientoDatos=false"  class="btn nav-link text-center text-white">Politicas</div>
             <div @click="verCatalogo=true, verPoliticas=false"  class="btn nav-link text-center text-white">Catalogo</div>
             <div @click="estadoAbrirInicioSesion(true)"  class="btn nav-link text-center text-white">Inicio sesion</div>
@@ -57,7 +66,6 @@ export default {
         },
     },
     async mounted() {
-      console.log(this.$route.query)
       if(this.$route.query.id=='tratamientoDatos'){
         this.verPoliticas = true
         this.verTratamientoDatos = true

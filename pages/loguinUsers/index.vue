@@ -43,7 +43,7 @@
                             <form @submit.prevent="inicioSesion()" v-else>                                
                                 <div class="p-2">
                                     <span><h3><strong>Usuario</strong></h3></span>
-                                    <b-form-input v-model="usuario.user" placeholder="" required></b-form-input>
+                                    <b-form-input v-model.number="usuario.user" type="number" placeholder="" required></b-form-input>
                                 </div>
                                 <div class="p-2">
                                     <span><h3><strong>Contraseña</strong></h3></span>
@@ -653,6 +653,7 @@ export default {
             }
         },
         async inicioSesion(){
+            this.espera = true
             if(this.usuario.rol=="Administrativo"){
                 if(this.usuario.user==''||this.usuario.user==undefined||
                 this.usuario.pass==''||this.usuario.pass==undefined){
@@ -661,13 +662,15 @@ export default {
                         title:'Oops...',
                         text:'Ningun campo debe estar vacio'
                     })
-                    return
+                    this.espera = false
+                    return                    
                 }else if(this.usuario.email==false && this.usuario.sms == false){
                     this.$swal.fire({
                         icon:'info',
                         title:'Vamos!',
                         text:'Escoge un metodo de verificacion SMS o EMAIL'
                     })
+                    this.espera = false
                     return
                 }else if(this.usuario.nitEmpresa==''||this.usuario.nitEmpresa==undefined){
                     this.$swal.fire({
@@ -675,9 +678,11 @@ export default {
                         title:'Oops...',
                         text:'Escribe el nit de la empresa'
                     }) 
+                    this.espera = false
                     return
                 }else{
                     let r = await this.$axios.$post('/newLoginAdmintemlo/iniSesion',this.usuario)
+                    this.espera = false
                     if (r.status===204){
                         this.$swal.fire({
                             icon:'error',
@@ -752,6 +757,7 @@ export default {
                         title:'Oops...',
                         text:'Ningun campo debe estar vacio'
                     })
+                    this.espera = false
                     return
                 }else if(this.usuario.email==false && this.usuario.sms == false){
                     this.$swal.fire({
@@ -759,6 +765,7 @@ export default {
                         title:'Vamos!',
                         text:'Escoge un metodo de verificacion SMS o EMAIL'
                     })
+                    this.espera = false
                     return
                 }else if(this.usuario.nitEmpresa==''||this.usuario.nitEmpresa==undefined){
                     this.$swal.fire({
@@ -766,9 +773,11 @@ export default {
                         title:'Oops...',
                         text:'Escribe el nit de la empresa'
                     }) 
+                    this.espera = false
                     return
                 }else{
                     let r = await this.$axios.$post('/newLoginProveedor/iniSesion',this.usuario)
+                    this.espera = false
                     if (r.status===204){
                         this.$swal.fire({
                             icon:'error',

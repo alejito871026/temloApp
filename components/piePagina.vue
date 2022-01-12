@@ -64,7 +64,7 @@ export default {
     height: 200px;
 }
 #tituloo {
-  background-color: #163c92;
+  background-color: #751094;
 }
 #textuno{
   font-size:10px;
