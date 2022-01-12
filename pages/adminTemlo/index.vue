@@ -128,6 +128,7 @@ export default {
                         this.conectadosClientes = await this.cargaConectados(4)
                     })
                     this.socket.on("conectadosProv",async()=>{
+                        console.log('funcion')
                         this.conectadosProveedores = await this.cargaConectados(2)
                     }) 
                     this.socket.on("conectadostransp",async()=>{

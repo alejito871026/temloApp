@@ -360,7 +360,7 @@ async function maill (pass,mail){
     console.log(pass)
     console.log('passEmail')
     let info = await transporter.sendMail({
-        from: '"Temlo.net ✔️ Verificacion" <dahdhenao@gmail.com>', // sender address
+        from: '"Temlo.net ✔️ Verificacion" <temlonet@gmail.com>', // sender address
         to: mail, // list of receivers
         subject: "Codigo de verificacion", // Subject line
         html: `<b>Codigo de verificacion: </b><strong> ${pass} </strong>`

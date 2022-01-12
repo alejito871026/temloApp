@@ -12,7 +12,7 @@ const config = {
 const {transporter} = require('../conexion/configMail.js');
 async function maill (pass,mail){
     let info = await transporter.sendMail({
-        from: '"Temlo.net ✔️ Verificacion" <dahdhenao@gmail.com>', // sender address
+        from: '"Temlo.net ✔️ Verificacion" <temlonet@gmail.com>', // sender address
         to: mail, // list of receivers
         subject: "prueba de funcionamiento", // Subject line
         html: `

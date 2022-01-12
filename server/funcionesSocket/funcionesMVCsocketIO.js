@@ -27,18 +27,23 @@ f.cargarOnline = async(data)=>{
         }
     }
     if(data.room==='adminProveedor' || data.room ==='ejecutivoProveedor'){
-        const empresa = await proveedores.find({_id:data.data.empresa})
+        console.log('data 32 funcionees socket')
+        console.log('entro por adminProveedor o ejecutivoProveedor')
+        console.log(data)
+        const empresa = await proveedores.findOne({_id:data.data.idEmpresa})
         const cargaOnline = {
-            nombre:data.data.nombreE+' '+data.data.primerApellidoE+' '+data.data.segundoApellidoE,
+            nombre:data.data.nombre,
             idEmpleado:data.data._id,
-            idEmpresa:data.data.empresa,
+            idEmpresa:data.data.idEmpresa,
             rol:data.data.rol,      
-            nombreEmpresa:empresa[0].nombreProveedor,
-            nit:empresa[0].nitProveedor,
+            nombreEmpresa:data.data.empresa,
+            nit:empresa.nitProveedor,
             socket:data.idSocket
         }
         const on = new OnlineP(cargaOnline)
+        console.log(on)
         const online = await on.save()
+        console.log(online)
         if(online){
             return true
         }else{

@@ -3,8 +3,8 @@
     export default function(socket, io) { 
     return Object.freeze({  
         async connected (data){
-            console.log(data)
             let r = await f.cargarOnline({data: data.data, idSocket:socket.id,room:data.room})
+            console.log(r)
             if(r){
                 io.of('/adminTemlo').emit('conectadosProv')
             }            
