@@ -101,7 +101,7 @@
                             <div class="textoG rounded">
                                 Visite nuestras politicas de 
                                 <strong>
-                                    <router-link to="/politicas/tratamientoDeDatos" target="_blank">tratamiento de datos</router-link>
+                                    <router-link :to="{path:'/', query:{id:'tratamientoDatos'}}" target="_blank">tratamiento de datos</router-link>
                                 </strong>, y asegurece de estar de acuerdo.
                                 <br><input type="checkbox" v-model="cliente.tyc" required>
                                 <span> Acepte los terminos y condiciones</span>

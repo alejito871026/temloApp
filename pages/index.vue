@@ -7,7 +7,8 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto"> 
           <b-navbar-nav>
-            <div @click="verCatalogo=true"  class="btn nav-link text-center text-white">Catalogo</div>
+            <div @click="verPoliticas=true,verCatalogo=false, verTratamientoDatos=false"  class="btn nav-link text-center text-white">Politicas</div>
+            <div @click="verCatalogo=true, verPoliticas=false"  class="btn nav-link text-center text-white">Catalogo</div>
             <div @click="estadoAbrirInicioSesion(true)"  class="btn nav-link text-center text-white">Inicio sesion</div>
             <div @click="estadoRegistroCliente(true)"  class="btn nav-link text-center text-white">Registrate</div>
           </b-navbar-nav>
@@ -18,6 +19,10 @@
     <div class="col-md-6 pb-2 mx-auto" v-if="verCatalogo">
         <b-form-input size="sm" class="mr-sm-2" placeholder="Buscar producto" @keyup="buscarProductoHome(productoHome)" v-model="productoHome"></b-form-input>
     </div>
+    </div>
+    <div v-if="verPoliticas">
+      politicas
+      <tratamientoDatos v-if="verTratamientoDatos"/>
     </div>
     <modal-inicio-sesion/>
     <modal-registro/>
@@ -40,6 +45,8 @@ export default {
             variable: new Boolean(),
             ocultar:true,
             verCatalogo:false,
+            verPoliticas:false,
+            verTratamientoDatos:false,
         }
     },
     watch:{
@@ -50,6 +57,11 @@ export default {
         },
     },
     async mounted() {
+      console.log(this.$route.query)
+      if(this.$route.query.id=='tratamientoDatos'){
+        this.verPoliticas = true
+        this.verTratamientoDatos = true
+      }
       this.validandoLoguin()
     },
     methods: {
