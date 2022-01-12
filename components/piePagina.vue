@@ -4,8 +4,8 @@
         <div class="container-fluid">
           <div id="textuno" >
             <strong>Visítenos</strong><br>
-            <p>Cra 6 # 16 - 57 <br>
-            Barrio el llano, Cartago Valle</p>
+            <p>Calle 9 # 1 - 74 <br>
+            Dosquebradas, Risaralda</p>
           </div>
           <div id="textuno">
               <strong>Ubicación</strong>
