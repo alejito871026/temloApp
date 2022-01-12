@@ -15,7 +15,8 @@ const creacionClienteSquema = new Schema({
     phoneC:{type:Number},
     phonePass:{type:String},
     smsOportunidades:{type:Number, default:0},
-    fechaCreacion:{type: Date, default: new Date()}
+    fechaCreacion:{type: Date, default: new Date()},
+    socketId:{type:String},
 });
 
 creacionClienteSquema.methods.encryptPassword = (contrasenaC) => {

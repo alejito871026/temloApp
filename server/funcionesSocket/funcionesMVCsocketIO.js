@@ -4,6 +4,7 @@ const OnlineTEM = require('../models/conectadosTemlo.js')
 const OnlineCLI = require('../models/conectadosClientes.js')
 const proveedores = require('../models/proveedores.js')
 const temlo = require('../models/temlo.js')
+const registro = require('../models/creacionClientes.js')
 const f = {}
 f.cargarOnline = async(data)=>{
     if(data.room==='adminTemlo' || data.room ==='ejecutivoTemlo'){
@@ -139,6 +140,14 @@ f.cargarOfflineIdSocket = async(data)=>{
         return true
     }else{
         return {err:1,msg:'no se elimino el cliente'}
+    }
+}
+f.eliminarRegistroCliente = async(data)=>{
+    const deleteRegistro = await registro.deleteOne({socketId:data.idSocket})
+    if(deleteRegistro.deletedCount>0){
+        return true
+    }else{
+        return {err:1,msg:'no se elimino ningun registro del cliente'}
     }
 }
 module.exports = f

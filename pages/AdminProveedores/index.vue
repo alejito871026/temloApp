@@ -16,8 +16,9 @@
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
-    <div ref="map" :style="mapStile">
+    <div ref="map" id="map" :style="mapStile">
     </div>
+    <input type="text" class="input-form" v-model="valorBuscar" @keyup="viendoDireccion()">
     <div class="btn btn-success" @click="cerrarMapa()" v-if="viendoMapa">cerrar</div>
     <div v-if="moduloEmpleados">
         <barra-admin-proveedores/>
@@ -44,11 +45,18 @@ export default {
         width: '0%',
         height: '0px'
       },
+      valorBuscar:'',
+      loader:null,
     }
   },
     async mounted(){
       this.validarCoordenadas()
       this.validandoLoguin()
+      this.loader = new Loader({
+          apiKey: 'AIzaSyBUug4MX79d36HIpp0O0lnESVzj4xI9LYM',
+          version: "weekly",
+          libraries: ["geometry"],
+      });
     },
   methods: {
     validandoLoguin(){
@@ -166,31 +174,51 @@ export default {
         height: '0px'
       }
     },
-    verMapa(){
-      const loader = new Loader({
-          apiKey: 'AIzaSyBUug4MX79d36HIpp0O0lnESVzj4xI9LYM',
-          version: "weekly",
-          libraries: ["geometry"],
-      });
-      loader.load().then(() => {
+    verMapa(){      
+      this.loader.load().then(() => {
         let lat = this.$auth.user.coordenadas.latitude
         let lng = this.$auth.user.coordenadas.longitude 
+        let latLng = new google.maps.LatLng(lat, lng);
         this.map = new google.maps.Map(this.$refs.map, {
-          center: new google.maps.LatLng(lat, lng),
+          center:latLng,
           zoom: 17,
           mapTypeId:'roadmap',
         });
-        const latLng = new google.maps.LatLng(lat, lng);
         new google.maps.Marker({
           position: latLng,
           map: this.map,
         });
+        
       });
       this.mapStile={
         width: '100%',
         height: '350px'
       },
       this.viendoMapa = true
+    },
+    async viendoDireccion(){
+      if(this.valorBuscar.length>3){
+          const geoCoder = new google.maps.Geocoder()
+          geoCoder.geocode({
+            'address':this.valorBuscar},function (resultado, status){
+            if (status === 'OK') {
+              var resultados = resultado[0].geometry.location
+              let lat = resultados.lat()
+              let lng = resultados.lng()
+              let latLng = new google.maps.LatLng(lat, lng);
+              let map = new google.maps.Map(document.getElementById('map'), {
+                center:latLng,
+                zoom: 17,
+                mapTypeId:'roadmap',
+              });
+              map.setCenter(resultado[0].geometry.location)
+              new google.maps.Marker({                
+                position: latLng, 
+                map,
+              });
+            }
+          });
+        }
     },
     async cargarCoordenadass(position){
       let coordenadas = {

@@ -9,7 +9,7 @@
           </div>
           <div id="textuno">
               <strong>Ubicación</strong>
-              <a href="https://www.google.com/maps/place/Convenios+APSA/@4.7477875,-75.920989,17z/data=!3m1!4b1!4m5!3m4!1s0x8e3871a7adbbedf1:0xe7555388e498826b!8m2!3d4.7477875!4d-75.9188003" class="col-sm-3" target="_blank" >
+              <a href="https://www.google.com/maps/place/temlo/@4.8242374,-75.7037669,17z/data=!3m1!4b1!4m5!3m4!1s0x8e38875f68493b1f:0x6b140f49972bb1dc!8m2!3d4.8242374!4d-75.7015782" class="col-sm-3" target="_blank" >
                 <div class="btn btn-group col-sm-12">
                   <img id="wap" src="../static/maps.png"> <p class="text-white pt-2" id="textuno">Mapa</p> 
                 </div>
@@ -18,21 +18,21 @@
           <div id="textuno">
             <strong>Contáctenos</strong><br>
             <div class="btn btn-group col-sm-12">
-              <a href="https://wa.me/573116793772" class="col-sm-3" target="_blank" >
+              <a href="https://wa.me/573506553184" class="col-sm-3" target="_blank" >
                 <div class="btn btn-group col-sm-12">
                   <img id="wap" src="../static/Whap.png" class="">
                   <div class="pt-2 text-white mx-auto" id="textuno">
                   </div>
                 </div>
               </a> 
-              <a href="https://www.facebook.com/Convenios-APSA-106662688362396" class="col-sm-3" target="_blank" >
+              <a href="https://www.facebook.com/Temloatiempo" class="col-sm-3" target="_blank" >
                 <div class="btn btn-group col-sm-12">
                   <img id="wap" src="../static/facebook.png" class="">
                   <div class="pt-2 text-white mx-auto" id="textuno">
                   </div>
                 </div>
               </a> 
-              <a href="https://l.wl.co/l?u=https%3A%2F%2Finstagram.com%2Fconveniosapsa%3Figshid%3D14g38o76ihvbd" class="col-sm-3" target="_blank" >
+              <a href="https://www.instagram.com/temloatiempo/" class="col-sm-3" target="_blank" >
                 <div class="btn btn-group col-sm-12">
                   <img id="wap" src="../static/insta.png" class="">
                   <div class="pt-2 text-white mx-auto" id="textuno">

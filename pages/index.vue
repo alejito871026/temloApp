@@ -1,7 +1,8 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">            
-      <router-link to="/" id="creditos" class="nav-item text-white">TEMLO.NET</router-link>
+    <b-navbar toggleable="lg" type="dark" variant="dark">  
+      <div @click="verCatalogo=false"  class="btn nav-link text-center text-white">TEMLO.NET</div>          
+      <router-link to="/" id="creditos" class="nav-item text-white"></router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto"> 
@@ -53,13 +54,22 @@ export default {
     },
     methods: {
       ...mapActions('storeCatalogo',['buscarProductoHome']),
-      ...mapMutations('storeInicioSesion',['estadoAbrirInicioSesion','estadoRegistroCliente']),
+      ...mapMutations('storeInicioSesion',['estadoAbrirInicioSesion','estadoRegistroCliente','estadoIdSocket']),
       buscarProducto(data){
         this.buscarProductoHome(data)
       }, 
       validandoLoguin(){
         if(!this.$auth.$state.loggedIn){
           console.log('no estas connectada')
+          this.socket = this.$nuxtSocket({
+              name: 'temloApp.net',
+              channel: '/',
+              persist: 'registro',
+              teardown: true
+          }) 
+          this.socket.emit('idSocket',this.socket.id,(respuesta)=>{
+            this.estadoIdSocket(respuesta)
+          })          
         }else{
           if(this.$auth.user.rol=='SUPERADMIN'||this.$auth.user.rol=='ADMIN'){
               this.$router.push("/adminTemlo")

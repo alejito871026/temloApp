@@ -52,8 +52,8 @@ router.post('/crear', async (req,res) => {
 })
 router.post('/validarMail', async (req, res) => {
     const clienteMail = await Cliente.findOne({emailC:req.body.emailC})
-    const clientecc = await Cliente.findOne({emailC:req.body.emailC})
-    if(clienteMail || clienteMail){
+    const clientecc = await Cliente.findOne({cedulaC:req.body.cedulaC})
+    if(clienteMail || clientecc){
         const data = {
             state:true,
             status:0
@@ -176,7 +176,6 @@ router.post('/eliminarRegistro', async (req, res) => {
     }
 })
 module.exports = router;
-
 async function cargarPass(){
     return new Promise((resolve, reject) =>{
         var current_date = (new Date()).valueOf().toString();

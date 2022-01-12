@@ -108,7 +108,7 @@
                             </div>
                             
                             <button class="btn btn-primary btn-block" :disabled="!cliente.tyc" v-if="!validando1"><h5><strong>Iniciar registro</strong></h5></button>
-                            <div class="btn btn-outline-primary btn-block" v-else @click="validandoMail(cliente.emailC,2,cliente.emailPass)"><strong>Validar codigo</strong></div>
+                            <div class="btn btn-outline-primary btn-block" v-else @click="validandoMail(cliente.emailC,2,cliente.emailPass)"><strong>Validar codigokihgk</strong></div>
                             <div class="btn btn-outline-warning btn-block" @click="cancelarRegistro(1)"><strong><b-icon-arrow-left></b-icon-arrow-left>Cancelar registro</strong></div>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                     <div class="mb-2">
                         <button class="btn btn-outline-primary btn-block" v-if="!validando2"><h5><strong>Enviar SMS</strong></h5></button>
                         <div class="btn btn-outline-primary btn-block" v-else @click="validandoSMS(cliente.celularC,2,cliente.celularPass)"><strong>Validar SMS</strong></div>
-                        <div class="btn btn-outline-warning btn-block" @click="cancelarRegistro(2)"><strong><b-icon-arrow-left></b-icon-arrow-left>Cancelar registro</strong></div>
+                        <div class="btn btn-outline-warning btn-block" @click="cancelarRegistro(1)"><strong><b-icon-arrow-left></b-icon-arrow-left>Cancelar registro</strong></div>
                     </div>
                 </form>
                 <div v-else class="mx-auto text-center">
@@ -194,7 +194,7 @@
                     </div>
                     <div class="p-2">
                         <div class="btn btn-outline-primary btn-block" @click="crear()"><h5><strong>Crear</strong></h5></div>
-                        <div class="btn btn-outline-warning btn-block" @click="cancelarRegistro()"><strong><b-icon-arrow-left></b-icon-arrow-left>Cancelar registro</strong></div>
+                        <div class="btn btn-outline-warning btn-block" @click="cancelarRegistro(1)"><strong><b-icon-arrow-left></b-icon-arrow-left>Cancelar registro</strong></div>
                     </div>
                 </div>
                 <div v-else class="mx-auto text-center">
@@ -213,14 +213,14 @@
 import {mapState, mapMutations} from 'vuex'
 export default {
     computed : {
-        ...mapState('storeInicioSesion',['cambiarContrasena', 'abrirRegistro','abiertoDesdeInicioSesion']),
+        ...mapState('storeInicioSesion',['cambiarContrasena', 'abrirRegistro','abiertoDesdeInicioSesion','idSocket']),
     },
     watch :{
         envios(n){
             if(n===5){
-                this.desabilitar()
+                this.deshabilitar()
             }
-        }
+        },
     },
     data(){
         return{
@@ -322,7 +322,7 @@ export default {
                 this.openModal3=true
             }
         },
-        desabilitar(){
+        deshabilitar(){
             if(!this.abiertoDesdeInicioSesion){
                 this.estadoRegistroCliente(false)
                 this.estadoRegistroAbrir(false)
@@ -343,6 +343,7 @@ export default {
                 fechaNacC:cliente.fechaNacC,
                 passC2:cliente.passC2,
                 emailC:cliente.emailC,
+                socketId:this.idSocket
             }
             if(n===1){
                 let r = await this.$axios.$post('/registroCliente/validarMail',data)
@@ -353,13 +354,38 @@ export default {
                         title: 'Este email',
                         text: 'Ya se encuentra registrado, puedes iniciar sesion ahora!',
                     })
-                    if(!this.abiertoDesdeInicioSesion){
-                        this.estadoRegistroCliente(false)
-                        this.estadoRegistroAbrir(false)
-                        this.estadoAbrirInicioSesion(true)
-                    }else{
-                        this.estadoRegistroCliente(false)
-                        this.estadoAbrirInicioSesion(true)
+                    if(this.envios==3){
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'As sobrepasado el limite de posibilidades, Actualiza la pagina y intenta de nuevo con tu numero celular',
+                        })
+                        this.cancelarRegistro(2)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
+                        if(!this.abiertoDesdeInicioSesion){
+                            this.estadoRegistroCliente(false)
+                            this.estadoRegistroAbrir(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }else{
+                            this.estadoRegistroCliente(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }
                     }
                     this.espera = false
                 }
@@ -367,16 +393,41 @@ export default {
                     //this.items[0] = r.cliente
                     this.$swal.fire({
                         icon: 'info',
-                        title: 'Este email',
-                        text: 'Ya se encuentra registrado, puedes iniciar sesion ahora!',
+                        title: 'Esta cedula',
+                        text: 'Ya se encuentra registrada, puedes iniciar sesion ahora!',
                     })
-                    if(!this.abiertoDesdeInicioSesion){
-                        this.estadoRegistroCliente(false)
-                        this.estadoRegistroAbrir(false)
-                        this.estadoAbrirInicioSesion(true)
-                    }else{
-                        this.estadoRegistroCliente(false)
-                        this.estadoAbrirInicioSesion(true)
+                    if(this.envios==3){
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'As sobrepasado el limite de posibilidades, intenta de nuevo con tu numero celular',
+                        })
+                        this.cancelarRegistro(2)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
+                        if(!this.abiertoDesdeInicioSesion){
+                            this.estadoRegistroCliente(false)
+                            this.estadoRegistroAbrir(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }else{
+                            this.estadoRegistroCliente(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }
                     }
                     this.espera = false
                 }
@@ -397,9 +448,41 @@ export default {
                         title: 'Oops...',
                         text: 'Este email ya se encuentra en proceso de registro',
                     })
+                    if(this.envios==3){
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'As sobrepasado el limite de posibilidades, Actualiza la pagina y intenta de nuevo con tu numero celular',
+                        })
+                        this.cancelarRegistro(2)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
+                        if(!this.abiertoDesdeInicioSesion){
+                            this.estadoRegistroCliente(false)
+                            this.estadoRegistroAbrir(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }else{
+                            this.estadoRegistroCliente(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }
+                    }
                 }
             }
-            //si le da a cancelar sin haber ingresado el codigo de verificacioan en mail se procedera a eliminar el dato luego de 10 min
             if(n===2){
                 this.espera = true
                 let r = await this.$axios.$post('/registroCliente/validarMail2',{emailC:this.cliente.emailC,emailPass})
@@ -415,6 +498,7 @@ export default {
                         border:'green',
                         borderStyle:'solid'
                     } 
+                    this.envios = 0
                     this.empezarRegistro(2)
                     clearInterval(this.iintervalo)
                     this.tempo1 = {}
@@ -431,12 +515,29 @@ export default {
                     if(r.status===203){
                         this.espera = false
                         this.items[0].emailOportunidades = this.items[0].emailOportunidades + 1
+                        this.cancelarRegistro(2)
                         this.$swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'Se procedera a eliminar los datos asociados a el registro efectuado',
+                            text: 'Agotaste las oportunidades, se procedera a eliminar los datos asociados a el registro efectuado',
                         })
-                        this.eliminarRegistro(emailC)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
                     }
                 }
             }
@@ -453,12 +554,30 @@ export default {
                         text: 'Este numero de celular ya se encuentra registrado a otro usuario, porfavor ingrese otro numero personal',
                     })
                     this.cliente.celularC=''
-                    if(this.envios == 5){
+                    if(this.envios == 3){
                         this.$swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'As sobrepasado el limite de posibilidades, Actualiza la pagina y intenta de nuevo con tu numero celular',
+                            text: 'As sobrepasado el limite de posibilidades, intenta de nuevo con tu numero celular personal',
                         })
+                        this.cancelarRegistro(2)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
                         if(!this.abiertoDesdeInicioSesion){
                             this.estadoRegistroCliente(false)
                             this.estadoRegistroAbrir(false)
@@ -485,6 +604,39 @@ export default {
                         title: 'Oops...',
                         text: 'este numero celular ya se encuentra en proceso de registro',
                     })
+                    if(this.envios == 3){
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'As sobrepasado el limite de posibilidades, Actualiza la pagina y intenta de nuevo con tu numero celular',
+                        })
+                        this.cancelarRegistro(2)
+                        this.cliente={
+                            nombreCompletoC:'',
+                            cedulaC:'',
+                            celularC:'',
+                            emailC:'',
+                            fechaAgregado: new Date(),
+                            fechaNacC:'',
+                            emailPass:'',
+                            celularPass:'',
+                            passC:'',
+                            passC2:'',
+                            faltando1:false,
+                            faltando2:false,
+                            faltando3:false,
+                            tyc:false,
+                        }
+                        this.envios = 0
+                        if(!this.abiertoDesdeInicioSesion){
+                            this.estadoRegistroCliente(false)
+                            this.estadoRegistroAbrir(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }else{
+                            this.estadoRegistroCliente(false)
+                            this.estadoAbrirInicioSesion(true)
+                        }
+                    }
                 }
             }
             //si le da a cancelar sin haber ingresado el codigo de verificacioan en mail se procedera a eliminar el dato luego de 10 min
@@ -503,6 +655,7 @@ export default {
                     this.empezarRegistro(3)
                     clearInterval(this.iintervalo)
                     this.tempo1 = {}
+                    this.envios = 0
                 }else{
                     if(r.status===202){
                         this.items[1].smsOportunidades = this.items[1].smsOportunidades + 1
@@ -513,13 +666,14 @@ export default {
                         })
                     }
                     if(r.status===203){
+                        this.envios = 0
                         this.items[1].smsOportunidades = this.items[1].smsOportunidades + 1
                         this.$swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'se procedera a eliminar los datos asociados a el registro efectuado'
+                            text: 'Agotaste las oportunidades, se procedera a eliminar los datos asociados a el registro efectuado, podras intenatrlo de nuevo en un momento'
                         })
-                        this.eliminarRegistro(this.cliente.emailC)
+                        this.cancelarRegistro(2)
                     }
                 }
             }
@@ -557,17 +711,27 @@ export default {
                 this.openModal3=false
             }
         },
-        cancelarRegistro(){
+        cancelarRegistro(n){
             let email = this.cliente.emailC
-            this.$swal.fire({
-                icon: 'info',
-                title: 'Oops...',
-                text: 'Se eliminaran los datos de nuestra base de datos, podras regritrarte de nuevo cuando quieras'
-            })
+            if(n==1){
+                this.$swal.fire({
+                    icon: 'info',
+                    title: 'Oops...',
+                    text: 'Se eliminaran los datos de nuestra base de datos, podras regritrarte de nuevo cuando quieras'
+                })
+            }
             this.registrandose = false
             this.openModal1=false; 
             this.cliente.emailC=null;
             this.cliente.emailPass=null;
+            this.cliente.nombreCompletoC='',
+            this.cliente.cedulaC='',
+            this.cliente.passC='',
+            this.cliente.passC2='',
+            this.cliente.celularC=null;
+            this.cliente.celularPass=null;
+            this.cliente.fechaNacC =null;
+            this.cliente.tyc = false
             this.items[0].validate = true;
             this.items[0].info = 'Se enviara un mail de vaidacion con el cual se generara su cuenta';
             this.items[0].disabled = true;
@@ -581,8 +745,6 @@ export default {
                 this.eliminarRegistro(email)
             }
             this.openModal2=false;
-            this.cliente.celularC=null;
-            this.cliente.fechaNacC =null;
             this.items[1].validate = true;
             this.items[1].info = 'Se enviara un sms de validacion al celular con el cual iniciara sesion';
             this.items[1].disabled = true;
@@ -596,8 +758,6 @@ export default {
                 this.eliminarRegistro(email)
             }
             this.openModal3=false;
-            this.cliente.cedulaC=null;
-            this.cliente.fechaNacC =null;
             this.items[2].validate = true;
             this.items[2].info = 'Se creara el cliente con los datos verificados';
             this.items[2].disabled = true;
@@ -626,15 +786,14 @@ export default {
                 }
                 if(minutos==-1){
                     this.cancelarRegistro()
-                    //crear la funcion de destruccion del email en la bd de creacionesCliente
-                    //cancelar el regsiro de acuerdo a lo que sea necesario en la funcion que vamos a crear a continuancio
                     return
                 }
             }, 1000);
         },
-       async eliminarRegistro(emailC){
+        async eliminarRegistro(emailC){
             const elimiado = await  this.$axios.$post('/registroCliente/eliminarRegistro',{emailC})
-            
+            console.log('eliminado 688 modalRegistro')
+            console.log(elimiado)
         },
         validarPassC(){
             if(this.cliente.passC.length < 6){
