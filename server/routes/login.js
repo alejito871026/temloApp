@@ -39,7 +39,7 @@ router.get('/usuario',async (req, res)=>{
         });
     }
     else{
-        console.log('errrrrrr')
+        console.log('errrrrrr 42 login js')
         console.log(err)
         return res.status(401).json({message: 'unauthorized'})
     }

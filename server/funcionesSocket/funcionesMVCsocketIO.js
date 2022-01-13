@@ -27,9 +27,6 @@ f.cargarOnline = async(data)=>{
         }
     }
     if(data.room==='adminProveedor' || data.room ==='ejecutivoProveedor'){
-        console.log('data 32 funcionees socket')
-        console.log('entro por adminProveedor o ejecutivoProveedor')
-        console.log(data)
         const empresa = await proveedores.findOne({_id:data.data.idEmpresa})
         const cargaOnline = {
             nombre:data.data.nombre,
@@ -41,9 +38,7 @@ f.cargarOnline = async(data)=>{
             socket:data.idSocket
         }
         const on = new OnlineP(cargaOnline)
-        console.log(on)
         const online = await on.save()
-        console.log(online)
         if(online){
             return true
         }else{

@@ -9,7 +9,41 @@ const contras = process.env.SECRET_KEY_TOKEN
 const config = {
     authSecret : process.env.SECRET_KEY_TOKEN
 }
+const authe = require('../middlewares/midAuth.js')
 const {transporter} = require('../conexion/configMail.js');
+router.post('/actualizarToken',authe, async (req, res)=>{
+    var token = req.headers.authorization
+    if (token) {
+        // verifies secret and checks if the token is expired
+        jwt.verify(token.replace(/^Bearer\s/, ''), config.authSecret,async (err, decoded)=>{
+            if (err) {
+                return res.status(401).json({
+                success: false,
+                message: 'unauthorized'
+                })
+            }
+            if(decoded) {       
+                const _id=decoded._id
+                let userr = await empleadoProveedor.findOne({'_id':_id})
+                const payload = {
+                    _id:userr._id,
+                }
+                    const token = jwt.sign(payload,config.authSecret,{
+                    expiresIn: 10800
+                })
+                console.log(token)
+                res.json({ 
+                    success:true,
+                    token,
+                    status:200
+                })    
+            }
+        });
+    }
+    else{
+        return res.status(401).json({message: 'unauthorized'})
+    }
+})
 router.post('/cambiandoPassword', async( req, res)=>{
     const encriptador = new empleadoProveedor()
     const newPassSecure = encriptador.encryptPassword(req.body.newPass)
@@ -287,7 +321,6 @@ module.exports = router;
 function enviarPass (pass,cliente){
     console.log(pass)
     console.log('pass')
-    console.log(cliente)
     return new Promise((resolve,reject) => { 
         /*Instale request ejecutando el comando "npm install --save request" */    
         var requests = require("request");
@@ -295,7 +328,6 @@ function enviarPass (pass,cliente){
         let security = '7a17af200c92d9e409d5dfca003d8619258b217c60e778f0c3ba6'
         let client = 2116
         let phone = cliente.celularE
-        console.log(phone)
         var options = { 
         method: 'POST',
         url: 'https://www.onurix.com/api/v1/send-sms',

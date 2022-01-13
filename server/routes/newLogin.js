@@ -31,7 +31,6 @@ async function maill (pass,mail){
     }
 }
 router.post('/cambiandoPassword', async( req, res)=>{
-    console.log(req.body)  
     if(req.body.celular){
         const encriptador = new Cliente()
         const newPassSecure = encriptador.encryptPassword(req.body.newPass)
@@ -109,7 +108,6 @@ router.post('/recuperarContrasenaMail', async( req, res)=>{
                 const updateCliente = await Cliente.updateOne({cedulaC:req.body.codigo},{$set:{editado:true, contrasenaC:newPassSecure, conMail:true, conCelular:false}})
                 if(updateCliente){
                     let okEnvio = await maill(pass,cliente.emailC)
-                    console.log(okEnvio)
                     if(okEnvio){
                         res.json({ 
                             success:true,
@@ -151,7 +149,6 @@ router.post('/recuperarContrasenaCel', async( req, res)=>{
                 const updateCliente = await Cliente.updateOne({cedulaC:req.body.codigo},{$set:{editado:true, contrasenaC:newPassSecure, conCelular:true, conMail:false}})
                 if(updateCliente){
                     let okEnvio = await enviarPass(pass,cliente)
-                    console.log(okEnvio)
                     if(okEnvio){
                         res.json({ 
                             success:true,
@@ -194,8 +191,6 @@ router.post('/MAIL', async( req, res)=>{
                 pass = pass + aletoria[a]
             } 
             let okEnvio = await maill(pass,cliente2.emailC)
-            console.log('okEnvio')
-            console.log(okEnvio)
             console.log('pass')
             console.log(pass)
             if(okEnvio.success===true){
@@ -266,7 +261,6 @@ router.post('/SMS', async( req, res)=>{
     }
 })
 router.post('/loginCliente', async (req, res)=>{
-    console.log(req.body)
     if(req.body.email){
         const cliente = await Cliente.findOne({emailC:req.body.emailC})
         if(cliente){
@@ -463,7 +457,6 @@ router.post('/loginCliente', async (req, res)=>{
                     const payload = {
                         _id:cliente1._id,
                     }
-                    console.log('entro por aca')
                         const token = jwt.sign(payload,config.authSecret,{
                         expiresIn: 10800
                     })

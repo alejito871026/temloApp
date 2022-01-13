@@ -15,9 +15,7 @@ router.post('/guardarDatosPrimeraVez', validarCantidad, async (req, res) => {
     empleadoTemlo.rol = 'SUPERADMIN'
     let contr = crearContrasena()
     contr.then(async (ress)=> {
-        console.log(ress)
         const envio = await enviarPass (ress,req.body.empleado)
-        console.log(envio)
         if(envio){
             empleadoTemlo.contrasenaE = empleadoTemlo.encryptPassword(ress)
             empleadoTemlo.fechaAgregado = new Date()

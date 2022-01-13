@@ -26,12 +26,12 @@
     <div v-if="moduloCatalogo">
         <catalogo-proveedores/>
     </div>
-    {{this.$auth.$state.user}}
+    {{$auth.$state.user}}
   </div>
 </template>
 
 <script>
-      import {Loader} from '@googlemaps/js-api-loader';
+import {Loader} from '@googlemaps/js-api-loader';
 export default {
   data(){
     return {
@@ -156,9 +156,16 @@ export default {
           showDenyButton: true,
           confirmButtonText: 'Cargar coordenadas',
           denyButtonText: 'No cargar',
-        }).then((result) => {
+        }).then(async (result) => {
           /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {            
+          if (result.isConfirmed) {  
+            let wifiAccessPoints = {
+              macAddress: "9c:1c:12:b0:45:f1",
+              age:0
+            }
+            /* const coordenadas  = await this.$axios.$post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBUug4MX79d36HIpp0O0lnESVzj4xI9LYM',wifiAccessPoints)    
+            console.log(coordenadas)   */  
+            //this.cargarCoordenadass(coordenadas) 
             navigator.geolocation.watchPosition(this.cargarCoordenadass)          
           } else if (result.isDenied) {
             this.$swal.fire('Changes are not saved', '', 'info')
@@ -228,6 +235,7 @@ export default {
       }
       coordenadas.latitude = position.coords.latitude,
       coordenadas.longitude = position.coords.longitude
+      console.log(coordenadas)
       const coord  = await this.$axios.$post('/proveedores/guardarCoordenadas',coordenadas)
       console.log(coord)
       if(coord.success){

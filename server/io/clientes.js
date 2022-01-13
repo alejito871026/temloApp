@@ -2,7 +2,6 @@ const f = require('../funcionesSocket/funcionesMVCsocketIO')
 export default function(socket, io) { 
     return Object.freeze({
         async clienteConectado(data){
-            console.log('Cliente conectado ' + data.nombre)
             data.idSocket = socket.id
             data.room = 'Cliente'
             let r = await f.cargarOnline(data)

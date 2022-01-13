@@ -26,7 +26,6 @@ export const mutations={
         state.productoClientesB = valor
     },
     estadoCarritoCargado(state, valor){
-        console.log(valor)
         state.carritoCargado = valor
     },
     estadoActualizarProductoStock(state, valor){
