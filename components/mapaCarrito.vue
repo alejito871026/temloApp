@@ -10,7 +10,11 @@
             <div ref="map" id="map" :style="mapStile">
 
             </div>
+            <input type="text" class="form-control border border-warning m-4 col-md-5" id="input" placeholder="Cra 5norte # 29 cartago" v-model="direccion" @keyup="mostrarPosicion(coordenadas,direccion)">
             <div class="card-footer">
+                <div class="btn btn-outline-warning btn-block" @click="gurdarUbicacionDestino()">
+                    <h4>Guardar ubicacion de destino</h4>
+                </div>
                 <div class="btn btn-outline-warning btn-block" @click="cerrar()">
                     <h4>Cerrar ingreso de ubicacion</h4>
                 </div>
@@ -45,65 +49,177 @@ export default {
             },
             map:null,
             loader:null,
+            direccion:'',
+            coordenadas : {
+                coords:{
+                    latitude:0,
+                    longitude:0
+                }
+            }
         }
     },
     methods:{
         ...mapMutations('storeClientes',['estadoVerMapaCarrito']),
-        ingresarDestino(){
-            navigator.geolocation.getCurrentPosition(this.mostrarPosicion);
+        async ingresarDestino(){
+            await navigator.geolocation.getCurrentPosition(this.mostrarPosicion);
         },
-        async mostrarPosicion(position){
+        async mostrarPosicion(position,direccion){
+            let lat = position.coords.latitude;
+            let lng = position.coords.longitude
+                this.coordenadas = {
+                    coords:{
+                        latitude : lat,
+                        longitude : lng
+                    },
+                }
             this.mapStile={
                 width: '0%',
                 height: '0px'
             }
-            this.loader.load().then(() => {                
-                let lat = position.coords.latitude;
-                let lng = position.coords.longitude
+            this.loader.load().then(() => {               
                 this.mapStile={
                     width: '100%',
                     height: '300px'
                 }
-                let latLng = new google.maps.LatLng(lat, lng);
-                let map = new google.maps.Map(this.$refs.map, {
-                    center:latLng,
-                    zoom: 16,
-                    mapTypeId:'roadmap',
-                });
-                const infoWindow = new google.maps.InfoWindow({
-                    content: "Si no es esta tu ubicacion exacta, mueve el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
-                });
-                let marker = new google.maps.Marker({
-                    position: latLng,
-                    map,
-                });
-                infoWindow.open({
-                    anchor: marker,
-                    map,
-                    shouldFocus: false,
-                });
-                map.addListener("click", (mapsMouseEvent) => {
-                    // Close the current InfoWindow.
-                    infoWindow.close();
-                    map.setCenter(mapsMouseEvent.latLng)
-                    marker.setMap(null)
-                    this.coordenadas = {
-                        lat : mapsMouseEvent.latLng.lat(),
-                        lng : mapsMouseEvent.latLng.lng()
-                    }
-                    marker = new google.maps.Marker({                
-                        position: mapsMouseEvent.latLng, 
+                if(direccion){
+                    if(direccion.length>=10){
+                        const geoCoder = new google.maps.Geocoder()
+                        geoCoder.geocode({'address':this.direccion,componentRestrictions: {country: "CO"}},(resultado, status)=>{
+                            if (status === 'OK') {    
+                                var resultados = resultado[0].geometry.location
+                                let lat = resultados.lat()
+                                let lng = resultados.lng()
+                                let latLng = new google.maps.LatLng(lat, lng);
+                                let map = new google.maps.Map(this.$refs.map, {
+                                    center:latLng,
+                                    zoom: 16,
+                                    mapTypeId:'roadmap',
+                                });
+                                const infoWindow = new google.maps.InfoWindow({
+                                    content: "Si no es esta tu ubicacion exacta, puedes dar click en la ubicacion exacta, o escribe la direccion en el buscador e intenta posicionar el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
+                                });
+                                let marker = new google.maps.Marker({
+                                    position: latLng,
+                                    map,
+                                });
+                                infoWindow.open({
+                                    anchor: marker,
+                                    map,
+                                    shouldFocus: false,
+                                });
+                                map.addListener("click", (mapsMouseEvent) => {
+                                    // Close the current InfoWindow.
+                                    infoWindow.close();
+                                    map.setCenter(mapsMouseEvent.latLng)
+                                    marker.setMap(null)
+                                   let c = {
+                                        lat : mapsMouseEvent.latLng.lat(),
+                                        lng : mapsMouseEvent.latLng.lng()
+                                    }
+                                    this.coordenadas = {
+                                        coords:{
+                                            latitude : c.lat,
+                                            longitude : c.lng
+                                        },
+                                    }
+                                    marker = new google.maps.Marker({                
+                                        position: mapsMouseEvent.latLng, 
+                                        map,
+                                        title:'Ubicacion actual'
+                                    });
+                                    infoWindow.open({
+                                        anchor: marker,
+                                        map,
+                                        shouldFocus: false,
+                                    });  
+                                })
+                            }
+                        })
+                    }else{
+                        let latLng = new google.maps.LatLng(lat, lng);
+                        let map = new google.maps.Map(this.$refs.map, {
+                            center:latLng,
+                            zoom: 16,
+                            mapTypeId:'roadmap',
+                        });
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: "Si no es esta tu ubicacion exacta, puedes dar click en la ubicacion exacta, o escribe la direccion en el buscador e intenta posicionar el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
+                        });
+                        let marker = new google.maps.Marker({
+                            position: latLng,
+                            map,
+                        });
+                        infoWindow.open({
+                            anchor: marker,
+                            map,
+                            shouldFocus: false,
+                        });
+                        map.addListener("click", (mapsMouseEvent) => {
+                            // Close the current InfoWindow.
+                            infoWindow.close();
+                            map.setCenter(mapsMouseEvent.latLng)
+                            marker.setMap(null)
+                            this.coordenadas = {
+                                lat : mapsMouseEvent.latLng.lat(),
+                                lng : mapsMouseEvent.latLng.lng()
+                            }
+                            marker = new google.maps.Marker({                
+                                position: mapsMouseEvent.latLng, 
+                                map,
+                                title:'Ubicacion actual'
+                            });
+                            infoWindow.open({
+                                anchor: marker,
+                                map,
+                                shouldFocus: false,
+                            });  
+                        })
+                    }        
+                }else{               
+                    let latLng = new google.maps.LatLng(lat, lng);
+                    let map = new google.maps.Map(this.$refs.map, {
+                        center:latLng,
+                        zoom: 16,
+                        mapTypeId:'roadmap',
+                    });
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: "Si no es esta tu ubicacion exacta, puedes dar click en la ubicacion exacta, o escribe la direccion en el buscador e intenta posicionar el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
+                    });
+                    let marker = new google.maps.Marker({
+                        position: latLng,
                         map,
-                        title:'Ubicacion actual'
                     });
                     infoWindow.open({
                         anchor: marker,
                         map,
                         shouldFocus: false,
-                    });  
-                })
+                    });
+                    map.addListener("click", (mapsMouseEvent) => {
+                        // Close the current InfoWindow.
+                        infoWindow.close();
+                        map.setCenter(mapsMouseEvent.latLng)
+                        marker.setMap(null)
+                        this.coordenadas = {
+                            lat : mapsMouseEvent.latLng.lat(),
+                            lng : mapsMouseEvent.latLng.lng()
+                        }
+                        marker = new google.maps.Marker({                
+                            position: mapsMouseEvent.latLng, 
+                            map,
+                            title:'Ubicacion actual'
+                        });
+                        infoWindow.open({
+                            anchor: marker,
+                            map,
+                            shouldFocus: false,
+                        });  
+                    })
+                }
             }); 
             this.modalDestino = true
+        },
+        gurdarUbicacionDestino(){
+            this.coordenadasFinal = 0
         },
         calcularDistancia(){
 
