@@ -7,7 +7,7 @@
             <div class="card-header bg-primary text-white text-center">
                 <h4>Porfavor ubique en el mapa el lugar de destino</h4>
             </div>
-            <div class="card-body" id="map" :style="mapStile">
+            <div ref="map" id="map" :style="mapStile">
 
             </div>
             <div class="card-footer">
@@ -44,6 +44,7 @@ export default {
                 height: '0px'
             },
             map:null,
+            loader:null,
         }
     },
     methods:{
@@ -52,17 +53,19 @@ export default {
             navigator.geolocation.getCurrentPosition(this.mostrarPosicion);
         },
         async mostrarPosicion(position){
-            console.log(position)
-
-            this.loader.load().then(() => {
+            this.mapStile={
+                width: '0%',
+                height: '0px'
+            }
+            this.loader.load().then(() => {                
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude
                 this.mapStile={
                     width: '100%',
                     height: '300px'
                 }
-                let lat = position.coords.latitude;
-                let lng = position.coords.longitude
                 let latLng = new google.maps.LatLng(lat, lng);
-                let map = new google.maps.Map(document.getElementById('map'), {
+                let map = new google.maps.Map(this.$refs.map, {
                     center:latLng,
                     zoom: 16,
                     mapTypeId:'roadmap',
@@ -82,7 +85,6 @@ export default {
                 map.addListener("click", (mapsMouseEvent) => {
                     // Close the current InfoWindow.
                     infoWindow.close();
-                    console.log(mapsMouseEvent)
                     map.setCenter(mapsMouseEvent.latLng)
                     marker.setMap(null)
                     this.coordenadas = {
@@ -100,9 +102,7 @@ export default {
                         shouldFocus: false,
                     });  
                 })
-            });
-
-            
+            }); 
             this.modalDestino = true
         },
         calcularDistancia(){
@@ -110,6 +110,10 @@ export default {
         },
         cerrar(){
             this.modalDestino = false,
+            this.mapStile={
+                width: '0px',
+                height: '0px'
+            }
             this.estadoVerMapaCarrito(false)
         },
     },
