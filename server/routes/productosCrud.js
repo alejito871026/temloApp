@@ -125,6 +125,7 @@ router.post('/guardarProducto', async (req, res) => {
     })  
 })
 router.post('/asignacion', async (req, res) => {
+    console.log(req.body)
     try {
         const asignacion = new proveedorProducto(req.body)
         const asignado = await asignacion.save()

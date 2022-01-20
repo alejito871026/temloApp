@@ -8,7 +8,6 @@ const ProveedorSquema = new Schema({
     telefonoProveedor: {type:Array, required:[true,'Cedula obligatorio']},
     direccionProveedor: { type: String, required:[true,'Contraseña obligatorio']},
     coordenadasProveedor:{type:Object},
-    coordenadas:{type:{type:String, enum:['Point'],required:true},coordinates:{type:['Number'],required:true},default:false},
     rutProveedor:{type:String },
     emailProveedor:{type:String, required:[true,'email obligatorio']},
     fechaAgregadoProveedor:{ type:Date, required:[true,'Fecha Agregado obligatorio']},

@@ -16,7 +16,7 @@
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
-    {{$auth.$state.user}}   
+    {{$auth.user}}   
     <div ref="map" id="map" :style="mapStile">
     </div>
     <div class="alert alert-danger input-group" v-if="!$auth.user.coordenadas && !viendoMapa">
@@ -62,7 +62,11 @@
 
 <script>
 import {Loader} from '@googlemaps/js-api-loader';
+import catalogoProveedores from '../../components/adminProveedores/catalogoProveedores.vue'
 export default {
+  components : {
+    catalogoProveedores,
+  },
   data(){
     return {
       moduloEmpleados:false,

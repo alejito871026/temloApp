@@ -8,11 +8,15 @@ export const state = () => ({
     indexProducto:null,
     keyid:null,
     verCarrito:false,
+    verMapaCarrito:false
 })
 export const getters= {
 
 } 
 export const mutations={
+    estadoVerMapaCarrito(state,valor){
+        state.verMapaCarrito = valor
+    },
     estadoVerCarrito(state,valor){
         state.verCarrito = valor
     },

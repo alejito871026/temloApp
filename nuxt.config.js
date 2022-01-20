@@ -56,7 +56,7 @@ export default {
     sockets: [ // Required
       { // At least one entry is required
         name: 'temloApp.net',
-        url: 'https://temlo-app.herokuapp.com',
+        url:'https://temlo-app.herokuapp.com',
         default: true,
         namespaces: {
           '/adminTemlo':{},

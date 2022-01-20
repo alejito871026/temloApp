@@ -7,9 +7,7 @@ const editPersonas = require('../models/edicionesPersonas.js')
 const authe = require('../middlewares/midAuth.js')
 
 router.post('/guardarCoordenadas', authe, async (req,res)=>{
-    console.log(req.body)
-    let coordenadass = [req.body.lng,req.body.lat]
-    const coord = await Proveedores.updateOne({_id:req.body._id},{$set:{"coordenadas.coordinates":coordenadass,coordenadasProveedor:{longitude:req.body.lng,latitude:req.body.lat}}})
+    const coord = await Proveedores.updateOne({_id:req.body._id},{$set:{coordenadasProveedor:{longitude:req.body.lng,latitude:req.body.lat}}})
     if(coord.modifiedCount>0){
         res.json({
             success:true,

@@ -42,6 +42,9 @@
                             </div>
                         </div>
                     </div>
+                    <mapa-carrito v-if="verMapaCarrito"/>
+
+                    <div class="btn btn-block btn-danger mt-2 " @click="estadoVerMapaCarrito(true)" v-if="!verMapaCarrito"><h5><strong>Calcular distancia</strong></h5></div>
                     <button class="btn btn-block btn-outline-info">Pagar</button>
                 </form>
                 <div class="btn btn-block btn-danger mt-2 " @click="estadoVerCarrito(false)"><h5><strong>Cerrar</strong></h5></div>
@@ -106,7 +109,7 @@
 import {mapState, mapActions, mapMutations} from 'vuex'
 export default {
     computed : {
-        ...mapState('storeClientes',['verCarrito','carritoCargado']),
+        ...mapState('storeClientes',['verCarrito','carritoCargado','verMapaCarrito']),
         multiplicarValor(){
             return this.valoresAcambiar.valUnd*this.valoresAcambiar.cantidad
         }, 
@@ -121,7 +124,7 @@ export default {
         }
     },
     methods:{
-        ...mapMutations('storeClientes',['estadoVerCatalogoClientes','estadoVerCarrito','estadoCarritoCargado']),
+        ...mapMutations('storeClientes',['estadoVerCatalogoClientes','estadoVerCarrito','estadoCarritoCargado','estadoVerMapaCarrito']),
         pagar(){
             
         },
