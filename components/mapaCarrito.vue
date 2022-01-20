@@ -13,7 +13,7 @@
             <input type="text" class="form-control border border-warning m-4 col-md-5" id="input" placeholder="Cra 5norte # 29 cartago" v-model="direccion" @keyup="mostrarPosicion(coordenadas,direccion)">
             <div class="card-footer">
                 <div class="btn btn-outline-warning btn-block" @click="gurdarUbicacionDestino()">
-                    <h4>Guardar ubicacion de destino</h4>
+                    <h4>Guardar ubicacion de destino {{coord}}</h4>
                 </div>
                 <div class="btn btn-outline-warning btn-block" @click="cerrar()">
                     <h4>Cerrar ingreso de ubicacion</h4>
@@ -55,6 +55,10 @@ export default {
                     latitude:0,
                     longitude:0
                 }
+            },
+            coord:{
+                lat:0,
+                lng:0,
             }
         }
     },
@@ -66,12 +70,16 @@ export default {
         async mostrarPosicion(position,direccion){
             let lat = position.coords.latitude;
             let lng = position.coords.longitude
-                this.coordenadas = {
-                    coords:{
-                        latitude : lat,
-                        longitude : lng
-                    },
-                }
+            this.coordenadas = {
+                coords:{
+                    latitude : lat,
+                    longitude : lng
+                },
+            }
+            this.coord = {
+                lat,
+                lng
+            }
             this.mapStile={
                 width: '0%',
                 height: '0px'
@@ -89,6 +97,10 @@ export default {
                                 var resultados = resultado[0].geometry.location
                                 let lat = resultados.lat()
                                 let lng = resultados.lng()
+                                this.coord = {
+                                    lat,
+                                    lng
+                                }
                                 let latLng = new google.maps.LatLng(lat, lng);
                                 let map = new google.maps.Map(this.$refs.map, {
                                     center:latLng,
@@ -108,19 +120,18 @@ export default {
                                     shouldFocus: false,
                                 });
                                 map.addListener("click", (mapsMouseEvent) => {
+                                    console.log('124')
                                     // Close the current InfoWindow.
                                     infoWindow.close();
                                     map.setCenter(mapsMouseEvent.latLng)
                                     marker.setMap(null)
-                                   let c = {
+                                    let c = {
                                         lat : mapsMouseEvent.latLng.lat(),
                                         lng : mapsMouseEvent.latLng.lng()
                                     }
-                                    this.coordenadas = {
-                                        coords:{
-                                            latitude : c.lat,
-                                            longitude : c.lng
-                                        },
+                                    this.coord = {
+                                        lat:c.lat,
+                                        lng:c.lng,
                                     }
                                     marker = new google.maps.Marker({                
                                         position: mapsMouseEvent.latLng, 
@@ -136,46 +147,61 @@ export default {
                             }
                         })
                     }else{
-                        let latLng = new google.maps.LatLng(lat, lng);
-                        let map = new google.maps.Map(this.$refs.map, {
-                            center:latLng,
-                            zoom: 16,
-                            mapTypeId:'roadmap',
-                        });
-                        const infoWindow = new google.maps.InfoWindow({
-                            content: "Si no es esta tu ubicacion exacta, puedes dar click en la ubicacion exacta, o escribe la direccion en el buscador e intenta posicionar el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
-                        });
-                        let marker = new google.maps.Marker({
-                            position: latLng,
-                            map,
-                        });
-                        infoWindow.open({
-                            anchor: marker,
-                            map,
-                            shouldFocus: false,
-                        });
-                        map.addListener("click", (mapsMouseEvent) => {
-                            // Close the current InfoWindow.
-                            infoWindow.close();
-                            map.setCenter(mapsMouseEvent.latLng)
-                            marker.setMap(null)
-                            this.coordenadas = {
-                                lat : mapsMouseEvent.latLng.lat(),
-                                lng : mapsMouseEvent.latLng.lng()
+                        if(direccion==''|| direccion.length<3){
+                            this.coord = {
+                                lat,
+                                lng
                             }
-                            marker = new google.maps.Marker({                
-                                position: mapsMouseEvent.latLng, 
+                            let latLng = new google.maps.LatLng(lat, lng);
+                            let map = new google.maps.Map(this.$refs.map, {
+                                center:latLng,
+                                zoom: 16,
+                                mapTypeId:'roadmap',
+                            });
+                            const infoWindow = new google.maps.InfoWindow({
+                                content: "Si no es esta tu ubicacion exacta, puedes dar click en la ubicacion exacta, o escribe la direccion en el buscador e intenta posicionar el marcador de geo-posicionamiento dando click en la ubicacion correcta.",
+                            });
+                            let marker = new google.maps.Marker({
+                                position: latLng,
                                 map,
-                                title:'Ubicacion actual'
                             });
                             infoWindow.open({
                                 anchor: marker,
                                 map,
                                 shouldFocus: false,
-                            });  
-                        })
-                    }        
-                }else{               
+                            });
+                            map.addListener("click", (mapsMouseEvent) => {
+                                console.log('174')
+                                // Close the current InfoWindow.
+                                infoWindow.close();
+                                map.setCenter(mapsMouseEvent.latLng)
+                                marker.setMap(null)
+                                let c = {
+                                    lat : mapsMouseEvent.latLng.lat(),
+                                    lng : mapsMouseEvent.latLng.lng()
+                                }
+                                this.coord = {
+                                    lat:c.lat,
+                                    lng:c.lng,
+                                }
+                                marker = new google.maps.Marker({                
+                                    position: mapsMouseEvent.latLng, 
+                                    map,
+                                    title:'Ubicacion actual'
+                                });
+                                infoWindow.open({
+                                    anchor: marker,
+                                    map,
+                                    shouldFocus: false,
+                                });  
+                            })
+                        } 
+                    }       
+                }else{   
+                    this.coord = {
+                        lat,
+                        lng
+                    }            
                     let latLng = new google.maps.LatLng(lat, lng);
                     let map = new google.maps.Map(this.$refs.map, {
                         center:latLng,
@@ -195,14 +221,19 @@ export default {
                         shouldFocus: false,
                     });
                     map.addListener("click", (mapsMouseEvent) => {
+                        console.log('225')
+                        let c = {
+                            lat : mapsMouseEvent.latLng.lat(),
+                            lng : mapsMouseEvent.latLng.lng()
+                        }
+                        this.coord = {
+                            lat:c.lat,
+                            lng:c.lng,
+                        }
                         // Close the current InfoWindow.
                         infoWindow.close();
                         map.setCenter(mapsMouseEvent.latLng)
                         marker.setMap(null)
-                        this.coordenadas = {
-                            lat : mapsMouseEvent.latLng.lat(),
-                            lng : mapsMouseEvent.latLng.lng()
-                        }
                         marker = new google.maps.Marker({                
                             position: mapsMouseEvent.latLng, 
                             map,
@@ -220,6 +251,8 @@ export default {
         },
         gurdarUbicacionDestino(){
             this.coordenadasFinal = 0
+            console.log(this.coord)
+            //this.$auth.$storage.setUniversal('horaSalida',t)
         },
         calcularDistancia(){
 
