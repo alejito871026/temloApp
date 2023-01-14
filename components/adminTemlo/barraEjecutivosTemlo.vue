@@ -27,7 +27,12 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex'
+import agregarEjecTemlo from '../../components/adminTemlo/agregarEjecTemlo.vue'
+import tablaEjecutivosTemlo from '../../components/adminTemlo/tablaEjecutivosTemlo.vue'
 export default {
+    components : {
+        agregarEjecTemlo,tablaEjecutivosTemlo
+    },
     computed:{
         ...mapState('storeAdminTemlo',['agregarEjecutivoTemlo','verEjecutivos'])
     },

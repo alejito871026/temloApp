@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 
 const onlineTransportadorSquema = new Schema({
     nombre:{type:String},
-    idEmpleado:{type:String},
-    rol:{type:String},      
-    nombreEmpresa:{type:String},
-    nit:{type:String},
+    idTransportador:{type:String},
     socket:{type:String}
 });
 module.exports = mongoose.model('onlineTransportador', onlineTransportadorSquema);

@@ -103,15 +103,15 @@ export default {
 </script>
 
 <style>
-#subcategorias {
-    opacity: 0.7;
-    background: linear-gradient( #5b076e, #b60682);
-  }
-  #btnSubcategoria {
-    background:#5f0752;
-    border: 3px solid #5f0780;
-    color: white
-  }
+    #subcategorias {
+        opacity: 0.7;
+        background: linear-gradient( #6e1f57, #b60682);
+    }
+    #btnSubcategoria {
+        background:#6e1f57;
+        border: 3px solid #5f0780;
+        color: white
+    }
   .bounce-enter-active {
     animation: bounce-in .5s;
   }

@@ -163,7 +163,8 @@ export default {
                     codigoInterno : provee.codigoInterno,
                     cantTotal:provee.cantidadStock,
                     proveedorId:provee.idProveedor._id,
-                    _id:provee._id,                    
+                    _id:provee._id,    
+                    coordenadas:provee.idProveedor.coordenadasProveedor,                
                 }
             }
         },
@@ -173,7 +174,6 @@ export default {
             this.modalCantidad = false
         },
         async actualizarStock(producto){
-            console.log(producto)
             const productoActualizado = await this.$axios.$post('/productos/actualizarStock',producto)
             const index = this.indexx
             if(productoActualizado.success){
@@ -187,7 +187,6 @@ export default {
                 if(this.$auth.$storage.getUniversal('carrito')){ 
                     let prod = this.$auth.$storage.getUniversal('carrito')
                     let produc = await prod.findIndex(el => el.idProducto === producto.idProducto) 
-                    console.log(produc)
                     if(produc>=0){
                         console.log('entre por repetido el producto')
                         let proveedorExiste = await prod[produc].proveedores.findIndex(el => el.idProveedor === producto.proveedorId) 
@@ -202,7 +201,8 @@ export default {
                                 precioUnd : producto.valUnd,
                                 nombreProveedor : producto.nombreP,
                                 codigoInterno : producto.codigoInterno,
-                                _id:producto._id
+                                _id:producto._id,
+                                coordenadas:producto.coordenadas
                             } 
                             prod[produc].proveedores.push(proveedor)
                         }
@@ -224,7 +224,8 @@ export default {
                             precioUnd : producto.valUnd,
                             nombreProveedor : producto.nombreP,
                             codigoInterno : producto.codigoInterno,
-                            _id:producto._id
+                            _id:producto._id,
+                            coordenadas:producto.coordenadas
                         } 
                         produ.proveedores.push(proveedor)
                         console.log('entra por nuevo seria un nuevo item ')
@@ -248,7 +249,8 @@ export default {
                         precioUnd : producto.valUnd,
                         nombreProveedor : producto.nombreP,
                         codigoInterno : producto.codigoInterno,
-                        _id:producto._id
+                        _id:producto._id,
+                        coordenadas:producto.coordenadas
                     } 
                     produ.proveedores.push(proveedor)
                     console.log('entra por nuevo sin haber carrito seria el primer producto')

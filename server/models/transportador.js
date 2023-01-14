@@ -13,9 +13,9 @@ const TransportadorSquema = new Schema({
     emailT:{unique:true,type:String, required:[true,'Direccion obligatorio']},
     fechaAgregadoT:{type:Date, required:[true,'Fecha Agregado obligatorio']},
     fechaNacT:{ type:Date, required:[true,'Fecha Nacimiento obligatorio']},
-    editadoT:{type:Boolean, default:false},
-    runt:{type:object},//informacion sobre el transportador en cuanto a documentacion para condicr
-    estadoActivoTransportado:{type:Boolean, default:false}
+    editadoT:{type:Boolean, default:true},
+    runt:{type:Object},//informacion sobre el transportador en cuanto a documentacion para condicr
+    estadoActivoTransportador:{type:Boolean, default:true}
 });
 
 TransportadorSquema.methods.encryptPassword = (contrasenaT) => {

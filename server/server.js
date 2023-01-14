@@ -15,6 +15,7 @@ app.use('/conexion', require('./routes/conexion.js'));
 app.use('/empleadosTemlo', require('./routes/empleadosTemlo.js'));
 app.use('/proveedores', require('./routes/proveedoresCrud.js'));
 app.use('/registroCliente', require('./routes/registroCliente.js'));
+app.use('/tYv', require('./routes/transportadoresYvehiculos.js'));
 
 app.use('/productos', require('./routes/productosCrud.js'));
 app.use('/imgs', require('./routes/imagenes.js'));

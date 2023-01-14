@@ -56,7 +56,7 @@ export default {
     sockets: [ // Required
       { // At least one entry is required
         name: 'temloApp.net',
-        url:'https://temlo-app.herokuapp.com',
+        url: 'http://localhost:3000',//'https://temlo-app.herokuapp.com',
         default: true,
         namespaces: {
           '/adminTemlo':{},
@@ -158,7 +158,7 @@ export default {
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseUrl:'https://temlo-app.herokuapp.com/server'
+    baseUrl:'http://localhost:3000/server',//'https://temlo-app.herokuapp.com/server'
   },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

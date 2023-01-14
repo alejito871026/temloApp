@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="lg"  style="background-color: #751094;">  
+    <b-navbar toggleable="lg"  style="background-color: #6e1f57;">  
       <div @click="verCatalogo=false, verPoliticas=false"  class="btn nav-link text-center text-warning"><strong>TEMLO.NET</strong></div>    
       <b-navbar-toggle target="nav-collapse" style="background-color: yellow;">
         <strong>

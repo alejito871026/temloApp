@@ -12,8 +12,8 @@ const edicionesPeronaSquema = new Schema({
     descripcion:{type:String},
     fechaEdicion:{type:Date},
     datosAnteriores:{type:Object},
-    idSquemaUpdate:{type:Schema.Types.ObjectId}
-
+    idSquemaUpdate:{type:String},
+    motivo:{type:String, default:'Actualizacion'},
     //de acuerdo a la necesidad se crearan los campos necesarios
 
 });
